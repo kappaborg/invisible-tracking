@@ -69,12 +69,12 @@ function Panel({
         {rows.map((r) => (
           <div
             key={r.label}
-            className="flex items-center justify-between gap-3 px-3 py-1 text-xs"
+            className="flex items-center gap-3 px-3 py-1 text-xs"
           >
-            <span className="text-muted font-mono uppercase tracking-wider text-[10px]">
+            <span className="text-muted font-mono uppercase tracking-wider text-[10px] shrink-0">
               {r.label}
             </span>
-            <span className="font-mono text-fg/90 text-right truncate max-w-[60%]">
+            <span className="flex-1 min-w-0 font-mono text-fg/90 text-right truncate">
               {r.value}
             </span>
           </div>

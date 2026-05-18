@@ -41,10 +41,11 @@ export function NotDoingPanel() {
         onClick={() => {
           setOpen(true);
         }}
-        className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-muted hover:text-cyan border border-border hover:border-cyan/60 px-3 py-1.5 rounded transition-colors"
+        className="inline-flex items-center gap-2 text-xs font-mono uppercase tracking-wider text-muted hover:text-cyan border border-border hover:border-cyan/60 px-2 sm:px-3 py-1.5 rounded transition-colors whitespace-nowrap shrink-0"
+        aria-label="What we're NOT doing"
       >
         <ShieldCheck className="w-3.5 h-3.5" />
-        What we're NOT doing
+        <span className="hidden sm:inline">What we're NOT doing</span>
       </button>
       <AnimatePresence>
         {open ? (

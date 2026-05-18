@@ -34,12 +34,12 @@ function PanelGroup({
             initial={{ opacity: 0, x: -6 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.03 }}
-            className="flex items-center justify-between gap-4 px-4 py-1.5 text-sm"
+            className="flex items-center gap-3 px-4 py-1.5 text-sm"
           >
-            <span className="text-muted font-mono uppercase tracking-wider text-[10px]">
+            <span className="text-muted font-mono uppercase tracking-wider text-[10px] shrink-0">
               {r.label}
             </span>
-            <span className="font-mono text-fg/90 text-right truncate max-w-[60%]">
+            <span className="flex-1 min-w-0 font-mono text-fg/90 text-right truncate">
               {r.value}
             </span>
           </motion.div>

@@ -47,10 +47,14 @@ export function ConsentScreen() {
               <Radio className="w-4 h-4" /> Presentation mode · room {room}
             </div>
             <p className="text-sm text-fg/80">
-              A summary of your profile (country, city, browser, OS, screen, fingerprint hash,
-              behaviour scores) will be broadcast to the presenter's wall for the duration of
-              this talk. <strong className="text-magenta">No IP address, no raw user-agent,
-              no name.</strong> The connection closes the moment you close this tab.
+              For this talk, your full profile — including your <strong className="text-magenta">
+              IP address, ISP, approximate city and lat/lng</strong>, device, OS, browser, screen,
+              fingerprint hashes, and behaviour scores — will be visible on the presenter's wall
+              for the duration of the session.
+            </p>
+            <p className="text-sm text-fg/70 mt-2">
+              Nothing is stored. The relay holds everything in memory and forgets it the moment
+              you close this tab. No raw user-agent or name is sent.
             </p>
           </div>
         ) : null}

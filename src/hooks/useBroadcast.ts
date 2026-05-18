@@ -15,20 +15,64 @@ function summarise(args: {
   if (!device) return null;
   const scores = fp ? computeScores({ device, fp, geo, telemetry }) : null;
   return {
-    countryCode: geo?.countryCode ?? '',
-    country: geo?.country ?? '',
-    city: geo?.city ?? '',
+    // System
     browser: `${device.browserName}${device.browserVersion ? ` ${device.browserVersion}` : ''}`,
     os: `${device.osName}${device.osVersion ? ` ${device.osVersion}` : ''}`,
     device: device.deviceType,
+    cpuArch: device.cpuArchitecture,
+    cpuCores: device.hardwareConcurrency,
+    deviceMemoryGb: device.deviceMemoryGb,
+    maxTouchPoints: device.maxTouchPoints,
+
+    // Display
     screen: `${String(device.screenWidth)}×${String(device.screenHeight)}`,
-    timezone: device.timezone,
+    pixelRatio: device.pixelRatio,
+    colorDepth: device.colorDepth,
     language: device.primaryLanguage,
+    languages: [...device.languages],
+    timezone: device.timezone,
+    utcOffsetMinutes: device.utcOffsetMinutes,
+    platform: device.platform,
+
+    // Network
+    ip: geo?.ip,
+    isp: geo?.isp,
+    asn: geo?.asn,
+    connectionType: device.connection.effectiveType,
+    downlinkMbps: device.connection.downlink,
+    rttMs: device.connection.rtt,
+
+    // Geolocation
+    countryCode: geo?.countryCode,
+    country: geo?.country,
+    region: geo?.region,
+    city: geo?.city,
+    postal: geo?.postal,
+    latitude: geo?.latitude ?? null,
+    longitude: geo?.longitude ?? null,
+    geoSource: geo?.source,
+
+    // Fingerprint
     fingerprintHash: fp?.canvasHash ?? undefined,
+    audioHash: fp?.audioHash ?? undefined,
+    webglVendor: fp?.webglVendor ?? undefined,
+    webglRenderer: fp?.webglRenderer ?? undefined,
+    fontsDetected: fp?.fontsDetected ?? [],
+    webrtcLocalIps: fp?.webrtcLocalIps ?? [],
+
+    // Derived
     engagement: scores ? Math.round(scores.engagement) : undefined,
     behaviorType: scores?.behaviorType,
     inferredInterest: scores?.inferredInterest,
     uniquenessN: scores?.uniquenessN,
+    uniquenessBits: scores?.uniquenessBits,
+    confidence: scores ? Math.round(scores.confidence) : undefined,
+
+    // Telemetry
+    timeOnPageSec: telemetry.timeOnPageSec,
+    clickCount: telemetry.clickCount,
+    scrollDepthPct: Math.round(telemetry.scrollDepthPct),
+    typingWpm: telemetry.typingWpm,
   };
 }
 

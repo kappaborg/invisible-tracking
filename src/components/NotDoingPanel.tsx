@@ -122,10 +122,11 @@ export function NotDoingPanel() {
                     Presentation mode · room {room}
                   </div>
                   <p>
-                    A profile summary (country, city, browser, OS, screen, fingerprint hash,
-                    behaviour scores) is being broadcast to the presenter's wall via PartyKit.
-                    <strong className="text-magenta"> No IP, no raw user-agent, no name.</strong>{' '}
-                    Server keeps everything in memory and forgets when you disconnect.
+                    For this talk, your full profile — IP, ISP, approximate location, device,
+                    browser, fingerprint hashes, behaviour scores — is being broadcast to the
+                    presenter's wall via PartyKit.{' '}
+                    <strong className="text-magenta">No raw user-agent, no name.</strong> Server
+                    keeps everything in memory and forgets when you disconnect.
                   </p>
                 </div>
               ) : null}

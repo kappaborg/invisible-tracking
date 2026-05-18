@@ -2,20 +2,59 @@ import type * as Party from 'partykit/server';
 
 type Profile = {
   clientId: string;
-  countryCode?: string;
-  country?: string;
-  city?: string;
+
   browser?: string;
   os?: string;
   device?: string;
+  cpuArch?: string;
+  cpuCores?: number;
+  deviceMemoryGb?: number | null;
+  maxTouchPoints?: number;
+
   screen?: string;
-  timezone?: string;
+  pixelRatio?: number;
+  colorDepth?: number;
   language?: string;
+  languages?: string[];
+  timezone?: string;
+  utcOffsetMinutes?: number;
+  platform?: string;
+
+  ip?: string;
+  isp?: string;
+  asn?: string;
+  connectionType?: string | null;
+  downlinkMbps?: number | null;
+  rttMs?: number | null;
+
+  countryCode?: string;
+  country?: string;
+  region?: string;
+  city?: string;
+  postal?: string;
+  latitude?: number | null;
+  longitude?: number | null;
+  geoSource?: string;
+
   fingerprintHash?: string;
+  audioHash?: string;
+  webglVendor?: string;
+  webglRenderer?: string;
+  fontsDetected?: string[];
+  webrtcLocalIps?: string[];
+
   engagement?: number;
   behaviorType?: string;
   inferredInterest?: string;
   uniquenessN?: number;
+  uniquenessBits?: number;
+  confidence?: number;
+
+  timeOnPageSec?: number;
+  clickCount?: number;
+  scrollDepthPct?: number;
+  typingWpm?: number;
+
   joinedAt: number;
   updatedAt: number;
 };
@@ -24,11 +63,12 @@ type ClientMsg =
   | { type: 'profile'; payload: Omit<Profile, 'clientId' | 'joinedAt' | 'updatedAt'> };
 
 type ServerMsg =
-  | { type: 'snapshot'; profiles: Profile[]; viewers: number }
-  | { type: 'upsert'; profile: Profile; viewers: number }
-  | { type: 'remove'; clientId: string; viewers: number };
+  | { type: 'snapshot'; profiles: Profile[]; viewers: number; version: 2 }
+  | { type: 'upsert'; profile: Profile; viewers: number; version: 2 }
+  | { type: 'remove'; clientId: string; viewers: number; version: 2 };
 
 const MAX_PROFILES = 200;
+const VERSION = 2 as const;
 
 export default class TrackingRoom implements Party.Server {
   profiles = new Map<string, Profile>();
@@ -57,6 +97,7 @@ export default class TrackingRoom implements Party.Server {
       type: 'snapshot',
       profiles: [...this.profiles.values()],
       viewers: this.countViewers(),
+      version: VERSION,
     };
     conn.send(JSON.stringify(msg));
   }
@@ -79,24 +120,33 @@ export default class TrackingRoom implements Party.Server {
       updatedAt: now,
     };
 
-    // Cap profiles to MAX_PROFILES, evicting oldest joiners first.
     if (!existing && this.profiles.size >= MAX_PROFILES) {
       const oldest = [...this.profiles.values()].sort((a, b) => a.joinedAt - b.joinedAt)[0];
       if (oldest) {
         this.profiles.delete(oldest.clientId);
-        this.broadcast({ type: 'remove', clientId: oldest.clientId, viewers: this.countViewers() });
+        this.broadcast({
+          type: 'remove',
+          clientId: oldest.clientId,
+          viewers: this.countViewers(),
+          version: VERSION,
+        });
       }
     }
 
     this.profiles.set(sender.id, profile);
-    this.broadcast({ type: 'upsert', profile, viewers: this.countViewers() });
+    this.broadcast({ type: 'upsert', profile, viewers: this.countViewers(), version: VERSION });
   }
 
   onClose(conn: Party.Connection): void {
     if (this.profiles.has(conn.id)) {
       this.profiles.delete(conn.id);
     }
-    this.broadcast({ type: 'remove', clientId: conn.id, viewers: this.countViewers() });
+    this.broadcast({
+      type: 'remove',
+      clientId: conn.id,
+      viewers: this.countViewers(),
+      version: VERSION,
+    });
   }
 }
 

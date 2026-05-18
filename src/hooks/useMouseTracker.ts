@@ -9,18 +9,24 @@ export function useMouseTracker(): void {
   const last = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(() => {
-    const onMove = (e: MouseEvent) => {
-      const x = e.clientX;
-      const y = e.clientY;
+    const recordPoint = (x: number, y: number) => {
       const prev = last.current;
       const d = prev ? distance(prev.x, prev.y, x, y) : 0;
       addMouseMove(x, y, d);
       last.current = { x, y };
     };
+    const onMove = (e: MouseEvent) => {
+      recordPoint(e.clientX, e.clientY);
+    };
+    const onTouchMove = (e: TouchEvent) => {
+      const t = e.touches[0];
+      if (t) recordPoint(t.clientX, t.clientY);
+    };
     const onClick = () => {
       bumpClick();
     };
     window.addEventListener('mousemove', onMove, { passive: true });
+    window.addEventListener('touchmove', onTouchMove, { passive: true });
     window.addEventListener('click', onClick, { passive: true });
 
     const pruneId = setInterval(() => {
@@ -29,6 +35,7 @@ export function useMouseTracker(): void {
 
     return () => {
       window.removeEventListener('mousemove', onMove);
+      window.removeEventListener('touchmove', onTouchMove);
       window.removeEventListener('click', onClick);
       clearInterval(pruneId);
     };

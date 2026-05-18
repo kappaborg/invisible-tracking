@@ -19,6 +19,7 @@ import { NotDoingPanel } from '@/components/NotDoingPanel';
 import { WipeSessionButton } from '@/components/WipeSessionButton';
 import { HeatmapCanvas } from '@/components/HeatmapCanvas';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { MobileNav } from '@/components/MobileNav';
 import { SECTION_TITLES } from '@/types';
 import type { SectionId } from '@/types';
 
@@ -50,12 +51,13 @@ function Chrome() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 z-30 backdrop-blur bg-bg/60 border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 py-2 flex items-center gap-3 text-xs font-mono">
-          <span className="text-cyan uppercase tracking-widest">Invisible Tracking</span>
-          <span className="text-muted">/</span>
-          <span className="text-fg/80">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center gap-2 sm:gap-3 text-xs font-mono">
+          <span className="text-cyan uppercase tracking-widest shrink-0">Invisible Tracking</span>
+          <span className="text-muted hidden sm:inline">/</span>
+          <span className="text-fg/80 hidden sm:inline truncate">
             Section {section} · {SECTION_TITLES[section]}
           </span>
+          <span className="text-fg/80 sm:hidden font-mono">§{section}</span>
           <div className="ml-auto flex items-center gap-2">
             <NotDoingPanel />
             <WipeSessionButton compact />
@@ -87,7 +89,7 @@ export default function App() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.35 }}
-          className="relative z-10"
+          className="relative z-10 pb-24 md:pb-0"
         >
           <ErrorBoundary label={SECTION_TITLES[section]}>
             <SectionFor id={section} />
@@ -96,6 +98,7 @@ export default function App() {
       </AnimatePresence>
       <CookieBanner />
       <PresenterOverlay />
+      <MobileNav />
     </div>
   );
 }

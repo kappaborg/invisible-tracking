@@ -106,17 +106,18 @@ export function Wall() {
   return (
     <div className="min-h-screen relative">
       <header className="sticky top-0 z-20 backdrop-blur bg-bg/70 border-b border-border">
-        <div className="max-w-[1800px] mx-auto px-6 py-3 flex items-center gap-6">
-          <div className="flex items-center gap-2 text-cyan font-mono text-sm uppercase tracking-widest">
+        <div className="max-w-[1800px] mx-auto px-4 sm:px-6 py-3 flex items-center flex-wrap gap-x-4 gap-y-2">
+          <div className="flex items-center gap-2 text-cyan font-mono text-xs sm:text-sm uppercase tracking-widest">
             <Radio className="w-4 h-4" />
-            Audience Wall · room {room}
+            <span className="hidden sm:inline">Audience Wall · room {room}</span>
+            <span className="sm:hidden">room {room}</span>
           </div>
           <div
-            className={`font-mono text-xs px-2 py-0.5 rounded ${
+            className={`font-mono text-[10px] sm:text-xs px-2 py-0.5 rounded ${
               connected ? 'text-green border border-green/40 bg-green/5' : 'text-amber border border-amber/40 bg-amber/5'
             }`}
           >
-            {host ? (connected ? 'connected' : 'connecting…') : 'no PartyKit host configured'}
+            {host ? (connected ? 'connected' : 'connecting…') : 'no host'}
           </div>
 
           <Stat label="Viewers" value={viewers} accent="cyan" />
@@ -131,10 +132,11 @@ export function Wall() {
               onClick={() => {
                 setShowQr((v) => !v);
               }}
-              className="inline-flex items-center gap-2 border border-border hover:border-cyan/60 hover:text-cyan text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded transition-colors"
+              className="inline-flex items-center gap-2 border border-border hover:border-cyan/60 hover:text-cyan text-[10px] sm:text-xs font-mono uppercase tracking-widest px-2 sm:px-3 py-1.5 rounded transition-colors"
             >
               <QrCode className="w-3.5 h-3.5" />
-              {showQr ? 'Hide QR' : 'Show QR'}
+              <span className="hidden sm:inline">{showQr ? 'Hide QR' : 'Show QR'}</span>
+              <span className="sm:hidden">QR</span>
             </button>
             <button
               type="button"
@@ -142,10 +144,11 @@ export function Wall() {
                 const newRoom = generateRoomId();
                 window.location.href = wallUrl(newRoom);
               }}
-              className="inline-flex items-center gap-2 border border-border hover:border-magenta/60 hover:text-magenta text-xs font-mono uppercase tracking-widest px-3 py-1.5 rounded transition-colors"
+              className="inline-flex items-center gap-2 border border-border hover:border-magenta/60 hover:text-magenta text-[10px] sm:text-xs font-mono uppercase tracking-widest px-2 sm:px-3 py-1.5 rounded transition-colors"
             >
               <ScanLine className="w-3.5 h-3.5" />
-              New room
+              <span className="hidden sm:inline">New room</span>
+              <span className="sm:hidden">New</span>
             </button>
           </div>
         </div>

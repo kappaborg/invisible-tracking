@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Cpu, Globe2, MapPin, Wifi } from 'lucide-react';
 import { useStore } from '@/store';
 import { collectDeviceInfo, formatUtcOffset } from '@/lib/deviceInfo';
-import { fetchGeo, staticMapUrl } from '@/lib/geolocation';
+import { fetchGeo, mapEmbedUrl } from '@/lib/geolocation';
 import { ProfileCard } from '@/components/ProfileCard';
 
 type Row = { label: string; value: string };
@@ -58,7 +58,6 @@ export function LiveCollection() {
   const setGeoError = useStore((s) => s.setGeoError);
   const geoLoading = useStore((s) => s.geoLoading);
   const geoError = useStore((s) => s.geoError);
-  const [mapBroken, setMapBroken] = useState(false);
 
   useEffect(() => {
     if (!device) setDevice(collectDeviceInfo());
@@ -140,7 +139,7 @@ export function LiveCollection() {
                 </div>
               </div>
             ) : null}
-            {geo && geo.latitude !== null && geo.longitude !== null && !mapBroken ? (
+            {geo && geo.latitude !== null && geo.longitude !== null ? (
               <div className="border border-border rounded-xl overflow-hidden">
                 <div className="px-4 py-2 border-b border-border flex items-center gap-2 bg-bg/40">
                   <MapPin className="w-4 h-4 text-magenta" />
@@ -148,15 +147,11 @@ export function LiveCollection() {
                     Approximate location
                   </span>
                 </div>
-                <img
-                  src={staticMapUrl(geo.latitude, geo.longitude)}
-                  alt={`Static map of ${geo.city}`}
-                  width={400}
-                  height={200}
-                  className="w-full h-auto"
-                  onError={() => {
-                    setMapBroken(true);
-                  }}
+                <iframe
+                  title={`Map of ${geo.city}`}
+                  src={mapEmbedUrl(geo.latitude, geo.longitude, 11)}
+                  loading="lazy"
+                  className="w-full h-56 sm:h-64 border-0 block"
                 />
                 <div className="px-4 py-2 text-xs text-muted italic">
                   If you're using a VPN, this is what the site sees — not where you actually are.

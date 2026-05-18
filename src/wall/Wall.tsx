@@ -405,10 +405,9 @@ export function Wall() {
           {showQr && qr ? (
             <div className="bg-panel border border-border rounded-xl p-4">
               <div className="font-mono text-xs uppercase tracking-widest text-cyan mb-2">
-                Scan to join
+                Scan to join · room {room}
               </div>
               <img src={qr} alt={`QR code to join room ${room}`} className="w-full h-auto" />
-              <div className="mt-3 font-mono text-xs text-fg/80 break-all">{joinUrl}</div>
             </div>
           ) : null}
 

@@ -12,7 +12,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import type { SharedProfile } from '@/lib/party';
-import { staticMapUrl } from '@/lib/geolocation';
+import { mapEmbedUrl } from '@/lib/geolocation';
 import { VENUE } from '@/lib/venue';
 
 function countryFlag(code?: string): string {
@@ -285,14 +285,15 @@ export function ProfileModal({
                         : 'Approximate location'}
                     </span>
                   </div>
-                  <img
-                    src={staticMapUrl(mapLat, mapLng, 13, 600, 240)}
-                    alt={
+                  <iframe
+                    title={
                       venuePinned
-                        ? `Static map of ${VENUE.label}`
-                        : `Static map of ${profile.city ?? 'audience'}`
+                        ? `Map of ${VENUE.label}`
+                        : `Map of ${profile.city ?? 'audience'}`
                     }
-                    className="w-full h-auto"
+                    src={mapEmbedUrl(mapLat, mapLng, 14)}
+                    loading="lazy"
+                    className="w-full h-56 sm:h-64 border-0 block"
                   />
                   {venuePinned ? (
                     <div className="px-3 py-1.5 text-[10px] font-mono text-muted italic">

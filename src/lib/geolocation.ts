@@ -90,12 +90,23 @@ export async function fetchGeo(timeoutMs = 6000): Promise<GeoInfo | null> {
   }
 }
 
-export function staticMapUrl(lat: number, lon: number, zoom = 10, w = 400, h = 200): string {
-  const url = new URL('https://staticmap.openstreetmap.de/staticmap.php');
-  url.searchParams.set('center', `${String(lat)},${String(lon)}`);
-  url.searchParams.set('zoom', String(zoom));
-  url.searchParams.set('size', `${String(w)}x${String(h)}`);
-  url.searchParams.set('maptype', 'mapnik');
-  url.searchParams.set('markers', `${String(lat)},${String(lon)},red-pushpin`);
+// Kept for backwards compat with any consumer still expecting a URL string.
+// The provider went offline; we now use the OpenStreetMap iframe embed.
+export function staticMapUrl(lat: number, lon: number, zoom = 13): string {
+  return mapEmbedUrl(lat, lon, zoom);
+}
+
+export function mapEmbedUrl(lat: number, lon: number, zoom = 13): string {
+  // Convert zoom to a degree span so the marker stays roughly centred at
+  // a comparable zoom level across screens.
+  const span = 0.05 * Math.pow(0.5, Math.max(0, zoom - 12));
+  const minLon = lon - span;
+  const maxLon = lon + span;
+  const minLat = lat - span * 0.6;
+  const maxLat = lat + span * 0.6;
+  const url = new URL('https://www.openstreetmap.org/export/embed.html');
+  url.searchParams.set('bbox', `${String(minLon)},${String(minLat)},${String(maxLon)},${String(maxLat)}`);
+  url.searchParams.set('layer', 'mapnik');
+  url.searchParams.set('marker', `${String(lat)},${String(lon)}`);
   return url.toString();
 }

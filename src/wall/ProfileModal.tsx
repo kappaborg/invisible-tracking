@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import type { SharedProfile } from '@/lib/party';
 import { staticMapUrl } from '@/lib/geolocation';
+import { VENUE } from '@/lib/venue';
 
 function countryFlag(code?: string): string {
   if (!code || code.length !== 2) return '🌐';
@@ -90,6 +91,7 @@ export function ProfileModal({
   onNext,
   position,
   total,
+  venuePinned,
 }: {
   profile: SharedProfile | null;
   onClose: () => void;
@@ -97,6 +99,7 @@ export function ProfileModal({
   onNext: () => void;
   position: number;
   total: number;
+  venuePinned: boolean;
 }) {
   useEffect(() => {
     if (!profile) return;
@@ -110,6 +113,13 @@ export function ProfileModal({
       window.removeEventListener('keydown', onKey);
     };
   }, [profile, onClose, onPrev, onNext]);
+
+  const realLat = profile?.latitude ?? null;
+  const realLng = profile?.longitude ?? null;
+  const hasRealCoords = realLat !== null && realLng !== null;
+  const mapLat = venuePinned ? VENUE.latitude : realLat;
+  const mapLng = venuePinned ? VENUE.longitude : realLng;
+  const showMap = venuePinned || hasRealCoords;
 
   return (
     <AnimatePresence>
@@ -251,29 +261,45 @@ export function ProfileModal({
                   },
                   { label: 'Postal', value: v(profile.postal) },
                   {
-                    label: 'Coordinates',
+                    label: 'Coordinates (real)',
                     value:
-                      profile.latitude !== null && profile.longitude !== null
-                        ? `${profile.latitude?.toFixed(3) ?? '—'}, ${profile.longitude?.toFixed(3) ?? '—'}`
+                      hasRealCoords
+                        ? `${realLat?.toFixed(3) ?? '—'}, ${realLng?.toFixed(3) ?? '—'}`
                         : '—',
                   },
                   { label: 'Source', value: v(profile.geoSource) },
                 ]}
               />
 
-              {profile.latitude !== null && profile.longitude !== null ? (
+              {showMap && mapLat !== null && mapLng !== null ? (
                 <div className="bg-bg border border-border rounded-lg overflow-hidden">
                   <div className="px-3 py-1.5 border-b border-border flex items-center gap-2 bg-panel/40">
-                    <MapPin className="w-3.5 h-3.5 text-magenta" />
-                    <span className="font-mono text-[10px] uppercase tracking-widest text-magenta">
-                      Approximate location
+                    <MapPin className={`w-3.5 h-3.5 ${venuePinned ? 'text-magenta' : 'text-cyan'}`} />
+                    <span
+                      className={`font-mono text-[10px] uppercase tracking-widest ${
+                        venuePinned ? 'text-magenta' : 'text-cyan'
+                      }`}
+                    >
+                      {venuePinned
+                        ? `Pinned to venue · ${VENUE.label}`
+                        : 'Approximate location'}
                     </span>
                   </div>
                   <img
-                    src={staticMapUrl(profile.latitude ?? 0, profile.longitude ?? 0, 9, 600, 240)}
-                    alt={`Static map of ${profile.city ?? 'audience'}`}
+                    src={staticMapUrl(mapLat, mapLng, 13, 600, 240)}
+                    alt={
+                      venuePinned
+                        ? `Static map of ${VENUE.label}`
+                        : `Static map of ${profile.city ?? 'audience'}`
+                    }
                     className="w-full h-auto"
                   />
+                  {venuePinned ? (
+                    <div className="px-3 py-1.5 text-[10px] font-mono text-muted italic">
+                      Override active · press <kbd className="text-fg">P</kbd> on the wall to
+                      switch back to the attendee's real coordinates.
+                    </div>
+                  ) : null}
                 </div>
               ) : null}
 

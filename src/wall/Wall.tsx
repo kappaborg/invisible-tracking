@@ -8,6 +8,7 @@ import {
   ArrowDownAZ,
   Play,
   Pause,
+  MapPin,
 } from 'lucide-react';
 import QRCode from 'qrcode';
 import type PartySocket from 'partysocket';
@@ -22,6 +23,7 @@ import {
 } from '@/lib/room';
 import { ProfileTile } from '@/wall/ProfileTile';
 import { ProfileModal } from '@/wall/ProfileModal';
+import { VENUE } from '@/lib/venue';
 
 function ensureRoomInUrl(): string {
   const current = readRoomFromUrl();
@@ -65,6 +67,7 @@ export function Wall() {
   const [openClientId, setOpenClientId] = useState<string | null>(null);
   const [sort, setSort] = useState<SortMode>('recent');
   const [autoRotate, setAutoRotate] = useState(false);
+  const [venuePinned, setVenuePinned] = useState(true);
   const socketRef = useRef<PartySocket | null>(null);
   const host = partykitHost();
   const joinUrl = audienceUrl(room);
@@ -185,6 +188,9 @@ export function Wall() {
       } else if (e.key === 'q' || e.key === 'Q') {
         e.preventDefault();
         setShowQr((v) => !v);
+      } else if (e.key === 'p' || e.key === 'P') {
+        e.preventDefault();
+        setVenuePinned((v) => !v);
       }
     };
     window.addEventListener('keydown', onKey);
@@ -285,6 +291,24 @@ export function Wall() {
             <button
               type="button"
               onClick={() => {
+                setVenuePinned((v) => !v);
+              }}
+              className={`inline-flex items-center gap-1 border text-[10px] sm:text-xs font-mono uppercase tracking-widest px-2 sm:px-3 py-1.5 rounded transition-colors ${
+                venuePinned
+                  ? 'border-magenta text-magenta'
+                  : 'border-border hover:border-magenta/60 hover:text-magenta'
+              }`}
+              title="Press P to toggle venue pin"
+            >
+              <MapPin className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">
+                {venuePinned ? `Pinned · ${VENUE.shortLabel}` : 'Real maps'}
+              </span>
+              <span className="sm:hidden">{venuePinned ? '📍' : 'Real'}</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
                 setShowQr((v) => !v);
               }}
               className="inline-flex items-center gap-1 border border-border hover:border-cyan/60 hover:text-cyan text-[10px] sm:text-xs font-mono uppercase tracking-widest px-2 sm:px-3 py-1.5 rounded transition-colors"
@@ -330,7 +354,7 @@ export function Wall() {
                 </span>
               ) : null}
               <span className="text-muted ml-auto">
-                S sort · Space auto-rotate · Enter expand first · Q toggle QR
+                S sort · Space auto-rotate · Enter expand · P venue pin · Q QR
               </span>
             </div>
           </div>
@@ -427,6 +451,9 @@ export function Wall() {
             <div>
               <kbd className="text-fg">Q</kbd> toggle QR
             </div>
+            <div>
+              <kbd className="text-fg">P</kbd> toggle venue pin
+            </div>
           </div>
         </aside>
       </main>
@@ -445,6 +472,7 @@ export function Wall() {
         }}
         position={openIndex}
         total={ordered.length}
+        venuePinned={venuePinned}
       />
     </div>
   );

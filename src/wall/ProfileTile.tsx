@@ -25,6 +25,15 @@ function isActive(p: SharedProfile): boolean {
   return Date.now() - p.updatedAt < 10_000;
 }
 
+function Row({ label, value }: { label: string; value?: string | null }) {
+  return (
+    <div className="flex items-baseline gap-2">
+      <dt className="text-muted shrink-0 w-14">{label}</dt>
+      <dd className="break-all text-fg/85">{value ?? '—'}</dd>
+    </div>
+  );
+}
+
 export function ProfileTile({ p, onClick }: { p: SharedProfile; onClick?: () => void }) {
   const state = tileState(p);
   const active = isActive(p);
@@ -66,20 +75,14 @@ export function ProfileTile({ p, onClick }: { p: SharedProfile; onClick?: () => 
         </div>
       </div>
 
-      <div className="grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5 text-[11px] font-mono text-fg/85">
-        <div className="text-muted">IP</div>
-        <div className="truncate">{p.ip ?? '—'}</div>
-        <div className="text-muted">ISP</div>
-        <div className="truncate">{p.isp ?? '—'}</div>
-        <div className="text-muted">Browser</div>
-        <div className="truncate">{p.browser ?? '—'}</div>
-        <div className="text-muted">OS</div>
-        <div className="truncate">{p.os ?? '—'}</div>
-        <div className="text-muted">Screen</div>
-        <div className="truncate">{p.screen ?? '—'}</div>
-        <div className="text-muted">TZ</div>
-        <div className="truncate">{p.timezone ?? '—'}</div>
-      </div>
+      <dl className="text-[11px] font-mono text-fg/85 space-y-1">
+        <Row label="IP" value={p.ip} />
+        <Row label="ISP" value={p.isp} />
+        <Row label="Browser" value={p.browser} />
+        <Row label="OS" value={p.os} />
+        <Row label="Screen" value={p.screen} />
+        <Row label="TZ" value={p.timezone} />
+      </dl>
 
       <div className="mt-auto pt-2 border-t border-border flex items-center justify-between">
         <div className="flex items-center gap-1 font-mono text-[10px] text-magenta truncate">

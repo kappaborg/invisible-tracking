@@ -52,13 +52,17 @@ function Chrome() {
     <>
       <header className="fixed top-0 left-0 right-0 z-30 backdrop-blur bg-bg/60 border-b border-border">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 flex items-center gap-2 sm:gap-3 text-xs font-mono">
-          <span className="text-cyan uppercase tracking-widest shrink-0">Invisible Tracking</span>
+          <span className="hidden sm:inline text-cyan uppercase tracking-widest shrink-0">
+            Invisible Tracking
+          </span>
           <span className="text-muted hidden sm:inline">/</span>
           <span className="text-fg/80 hidden sm:inline truncate">
             Section {section} · {SECTION_TITLES[section]}
           </span>
-          <span className="text-fg/80 sm:hidden font-mono">§{section}</span>
-          <div className="ml-auto flex items-center gap-2">
+          <span className="text-cyan sm:hidden font-mono uppercase tracking-widest shrink-0">
+            §{section}
+          </span>
+          <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
             <NotDoingPanel />
             <WipeSessionButton compact />
           </div>

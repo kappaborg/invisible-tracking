@@ -34,12 +34,12 @@ function PanelGroup({
             initial={{ opacity: 0, x: -6 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.03 }}
-            className="flex items-center gap-3 px-4 py-1.5 text-sm"
+            className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-3 px-4 py-1.5 text-sm"
           >
-            <span className="text-muted font-mono uppercase tracking-wider text-[10px] shrink-0">
+            <span className="text-muted font-mono uppercase tracking-wider text-[10px] sm:shrink-0">
               {r.label}
             </span>
-            <span className="flex-1 min-w-0 font-mono text-fg/90 text-right truncate">
+            <span className="font-mono text-fg/90 break-all sm:flex-1 sm:min-w-0 sm:text-right sm:break-words sm:whitespace-normal">
               {r.value}
             </span>
           </motion.div>
@@ -151,7 +151,7 @@ export function LiveCollection() {
                   title={`Map of ${geo.city}`}
                   src={mapEmbedUrl(geo.latitude, geo.longitude, 11)}
                   loading="lazy"
-                  className="w-full h-56 sm:h-64 border-0 block"
+                  className="w-full h-48 sm:h-64 border-0 block"
                 />
                 <div className="px-4 py-2 text-xs text-muted italic">
                   If you're using a VPN, this is what the site sees — not where you actually are.

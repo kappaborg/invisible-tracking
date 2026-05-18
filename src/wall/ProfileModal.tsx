@@ -69,12 +69,12 @@ function Panel({
         {rows.map((r) => (
           <div
             key={r.label}
-            className="flex items-center gap-3 px-3 py-1 text-xs"
+            className="flex flex-col sm:flex-row sm:items-center gap-0.5 sm:gap-3 px-3 py-1.5 text-xs"
           >
-            <span className="text-muted font-mono uppercase tracking-wider text-[10px] shrink-0">
+            <span className="text-muted font-mono uppercase tracking-wider text-[10px] sm:shrink-0">
               {r.label}
             </span>
-            <span className="flex-1 min-w-0 font-mono text-fg/90 text-right truncate">
+            <span className="font-mono text-fg/90 break-all sm:flex-1 sm:min-w-0 sm:text-right sm:break-words sm:whitespace-normal">
               {r.value}
             </span>
           </div>
@@ -153,8 +153,8 @@ export function ProfileModal({
                   IP {profile.ip ?? '—'} · {profile.isp ?? '—'}
                 </div>
               </div>
-              <div className="ml-auto flex items-center gap-2">
-                <span className="font-mono text-xs text-muted">
+              <div className="ml-auto flex items-center gap-1.5 sm:gap-2 shrink-0">
+                <span className="hidden sm:inline font-mono text-xs text-muted">
                   {position + 1} / {total}
                 </span>
                 <button
@@ -293,7 +293,7 @@ export function ProfileModal({
                     }
                     src={mapEmbedUrl(mapLat, mapLng, 14)}
                     loading="lazy"
-                    className="w-full h-56 sm:h-64 border-0 block"
+                    className="w-full h-48 sm:h-64 border-0 block"
                   />
                   {venuePinned ? (
                     <div className="px-3 py-1.5 text-[10px] font-mono text-muted italic">

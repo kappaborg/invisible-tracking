@@ -69,14 +69,14 @@ export function ProfileCard({ dramatic = false }: { dramatic?: boolean }) {
             initial={{ opacity: 0, x: -8 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: i * 0.04, duration: 0.25 }}
-            className={`flex items-center gap-3 px-5 ${
-              dramatic ? 'py-3 text-sm sm:text-lg' : 'py-2 text-sm'
+            className={`flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 px-4 sm:px-5 ${
+              dramatic ? 'py-2.5 text-sm sm:text-lg' : 'py-2 text-sm'
             }`}
           >
-            <span className="text-muted font-mono uppercase tracking-wider text-xs shrink-0">
+            <span className="text-muted font-mono uppercase tracking-wider text-[10px] sm:text-xs sm:shrink-0">
               {row.label}
             </span>
-            <span className="flex-1 min-w-0 font-mono text-fg text-right truncate">
+            <span className="font-mono text-fg break-all sm:flex-1 sm:min-w-0 sm:text-right sm:break-words sm:whitespace-normal">
               {row.value}
             </span>
           </motion.div>

@@ -353,7 +353,7 @@ export function Wall() {
                   {aggregates.topAsn.count}
                 </span>
               ) : null}
-              <span className="text-muted ml-auto">
+              <span className="hidden md:inline text-muted ml-auto">
                 S sort · Space auto-rotate · Enter expand · P venue pin · Q QR
               </span>
             </div>
@@ -384,7 +384,7 @@ export function Wall() {
           ) : (
             <motion.div
               layout
-              className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-3"
+              className="grid grid-cols-1 sm:grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-3"
             >
               <AnimatePresence>
                 {ordered.map((p) => (
@@ -407,7 +407,11 @@ export function Wall() {
               <div className="font-mono text-xs uppercase tracking-widest text-cyan mb-2">
                 Scan to join · room {room}
               </div>
-              <img src={qr} alt={`QR code to join room ${room}`} className="w-full h-auto" />
+              <img
+                src={qr}
+                alt={`QR code to join room ${room}`}
+                className="w-full max-w-[240px] sm:max-w-none mx-auto h-auto"
+              />
             </div>
           ) : null}
 

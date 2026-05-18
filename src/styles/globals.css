@@ -1,0 +1,116 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/600.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+  background: #0a0e1a;
+  color: #e6f1ff;
+}
+
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgba(0, 240, 255, 0.35);
+  color: #ffffff;
+}
+
+.font-mono,
+.mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Glitch effect for the dramatic reveal. */
+@keyframes glitch-rgb {
+  0% {
+    text-shadow: 2px 0 #ff2bd6, -2px 0 #00f0ff;
+    transform: translate(0, 0);
+  }
+  20% {
+    text-shadow: -3px 0 #ff2bd6, 3px 0 #00f0ff;
+    transform: translate(-1px, 1px);
+  }
+  40% {
+    text-shadow: 4px 0 #ff2bd6, -4px 0 #00f0ff;
+    transform: translate(1px, -1px);
+  }
+  60% {
+    text-shadow: -2px 0 #ff2bd6, 2px 0 #00f0ff;
+    transform: translate(2px, 1px);
+  }
+  80% {
+    text-shadow: 3px 0 #ff2bd6, -3px 0 #00f0ff;
+    transform: translate(-2px, -1px);
+  }
+  100% {
+    text-shadow: 0 0 #ff2bd6, 0 0 #00f0ff;
+    transform: translate(0, 0);
+  }
+}
+
+.glitch {
+  animation: glitch-rgb 1.2s steps(8) 1;
+  position: relative;
+}
+
+.scanline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.04) 0,
+    rgba(255, 255, 255, 0.04) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch {
+    animation: none;
+  }
+}
+
+/* Subtle grid background used on landing/data sections. */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+  background-size: 32px 32px;
+  background-position: -1px -1px;
+}
+
+/* Neon focus rings. */
+*:focus-visible {
+  outline: 2px solid #00f0ff;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Hide scrollbars on the section containers (they are page-managed). */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}

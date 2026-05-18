@@ -1,0 +1,6 @@
+{
+  "$schema": "https://www.partykit.io/schema.json",
+  "name": "invisible-tracking-demo",
+  "main": "party/server.ts",
+  "compatibilityDate": "2024-09-01"
+}
